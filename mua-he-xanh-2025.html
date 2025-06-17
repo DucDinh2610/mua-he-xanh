@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kế Hoạch Chiến Dịch Mùa Hè Xanh 2025 - Thị Trấn Văn Điển</title>
+    <!-- Chosen Palette: Warm Neutrals with Green and Blue Accents -->
+    <!-- Application Structure Plan: The SPA uses a dashboard-style, single-page layout with a sticky navigation bar for easy access to all key sections. The structure prioritizes user engagement by presenting information in a non-linear, exploratory format. It begins with high-impact summary cards (Objectives), followed by a tabbed interface for detailed activities (Action Plan), a visual timeline and an interactive budget chart, and finally a media/communications section. This structure is designed to guide the user from a high-level overview to detailed information logically, making the complex plan digestible and engaging for potential volunteers and sponsors. -->
+    <!-- Visualization & Content Choices: 
+        - Objectives: Goal: Inform/Impact. Method: Dynamic stat cards with icons. Interaction: Hover effects. Justification: Provides a quick, scannable summary of the campaign's key performance indicators.
+        - Action Plan: Goal: Organize. Method: Tabbed interface for activity clusters (Môi trường, An sinh, Thiếu nhi). Interaction: Clicking tabs reveals detailed activity cards. Justification: Prevents information overload by chunking the detailed plan into thematic, manageable sections, which is more user-friendly than a long table.
+        - Budget: Goal: Compare/Proportion. Method: Doughnut Chart (Chart.js) for budget allocation. Interaction: Hover tooltips and a button to toggle a detailed table. Justification: A chart offers an immediate visual understanding of financial priorities, while the interactive table provides granularity on demand.
+        - Timeline: Goal: Show Process/Change. Method: Vertical timeline diagram built with HTML/Tailwind. Interaction: N/A, purely visual. Justification: Clearly illustrates the campaign's phased approach in a more engaging way than a simple list of dates.
+        - Media Content: Goal: Organize/Generate. Method: Interactive AI generator. Interaction: User selects options and clicks a button to generate content. Justification: Provides direct utility and creative assistance to the campaign organizers, replacing static examples.
+        - Library/Method: Chart.js for visualizations (Canvas-based). Vanilla JS for all interactions including Gemini API calls. HTML/CSS/Tailwind for all structural and visual elements. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> <!-- Added for rendering Markdown from AI -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f8fafc;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            height: auto;
+            min-height: 300px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                min-height: 400px;
+            }
+        }
+        .tab-active {
+            border-color: #2563eb;
+            color: #2563eb;
+            font-weight: 600;
+        }
+        /* Styles for AI Modal */
+        #ai-modal-content h3 {
+            font-size: 1.25rem; /* 20px */
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        #ai-modal-content p {
+            margin-bottom: 0.5rem;
+        }
+        #ai-modal-content ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border-left-color: #fff;
+            animation: spin 1s ease infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="text-slate-700">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-4 lg:px-6 py-3">
+            <div class="flex flex-wrap justify-between items-center">
+                <a href="#" class="flex items-center">
+                    <span class="text-xl font-bold text-blue-600">MHX 2025</span>
+                    <span class="text-sm font-semibold ml-2 text-slate-600 hidden md:block">| TT. Văn Điển</span>
+                </a>
+                <div class="lg:hidden">
+                    <button id="mobile-menu-button" class="p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
+                <div id="main-nav" class="hidden w-full lg:flex lg:w-auto lg:items-center">
+                    <ul class="flex flex-col lg:flex-row lg:space-x-8 mt-4 lg:mt-0 font-medium">
+                        <li><a href="#tong-quan" class="block py-2 pr-4 pl-3 text-slate-700 hover:text-blue-600">Tổng Quan</a></li>
+                        <li><a href="#ke-hoach" class="block py-2 pr-4 pl-3 text-slate-700 hover:text-blue-600">Kế Hoạch</a></li>
+                        <li><a href="#kinh-phi" class="block py-2 pr-4 pl-3 text-slate-700 hover:text-blue-600">Kinh Phí & Lịch Trình</a></li>
+                        <li><a href="#truyen-thong" class="block py-2 pr-4 pl-3 text-slate-700 hover:text-blue-600">Truyền Thông</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="bg-blue-50 py-20 px-4 text-center">
+            <div class="container mx-auto">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-blue-800 mb-4">Chiến Dịch Mùa Hè Xanh 2025</h1>
+                <p class="text-lg md:text-xl font-semibold text-slate-600 mb-2">Thị Trấn Văn Điển, Huyện Thanh Trì, Hà Nội</p>
+                <p class="text-2xl font-bold text-green-600 mb-8 italic">"Dấu chân Tình nguyện - Sức trẻ Thanh Trì"</p>
+                <a href="#truyen-thong" class="bg-blue-600 text-white font-bold py-3 px-8 rounded-full hover:bg-blue-700 transition-transform transform hover:scale-105">Tham Gia Ngay</a>
+            </div>
+        </section>
+
+        <!-- Overview & Objectives Section -->
+        <section id="tong-quan" class="py-16 lg:py-24 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-800">Mục Tiêu Trọng Tâm</h2>
+                    <p class="mt-2 text-lg text-slate-500">Chiến dịch hướng tới việc tạo ra những giá trị bền vững cho cộng đồng và phát huy sức trẻ tình nguyện.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-slate-50 p-6 rounded-lg text-center border border-slate-200 hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+                        <div class="text-4xl mb-3">🌿</div>
+                        <h3 class="text-xl font-bold mb-2">Đô Thị Văn Minh</h3>
+                        <p class="text-slate-600">Cải tạo <span class="font-bold text-blue-600">02</span> không gian công cộng và tổ chức <span class="font-bold text-blue-600">04</span> buổi dọn vệ sinh môi trường.</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-lg text-center border border-slate-200 hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+                        <div class="text-4xl mb-3">❤️</div>
+                        <h3 class="text-xl font-bold mb-2">An Sinh Xã Hội</h3>
+                        <p class="text-slate-600">Trao tặng <span class="font-bold text-blue-600">20</span> suất quà và tổ chức <span class="font-bold text-blue-600">"Bữa cơm nghĩa tình"</span> cho 30 người cao tuổi.</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-lg text-center border border-slate-200 hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+                        <div class="text-4xl mb-3">👧</div>
+                        <h3 class="text-xl font-bold mb-2">Vì Đàn Em Thân Yêu</h3>
+                        <p class="text-slate-600">Tổ chức sinh hoạt hè cho <span class="font-bold text-blue-600">100+</span> thiếu nhi và cải tạo <span class="font-bold text-blue-600">01</span> sân chơi.</p>
+                    </div>
+                    <div class="bg-slate-50 p-6 rounded-lg text-center border border-slate-200 hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+                        <div class="text-4xl mb-3">🔥</div>
+                        <h3 class="text-xl font-bold mb-2">Phát Huy Sức Trẻ</h3>
+                        <p class="text-slate-600">Thu hút <span class="font-bold text-blue-600">50+</span> tình nguyện viên, tạo môi trường rèn luyện và cống hiến.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Action Plan Section -->
+        <section id="ke-hoach" class="py-16 lg:py-24">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-800">Kế Hoạch Hành Động Chi Tiết</h2>
+                    <p class="mt-2 text-lg text-slate-500">Các hoạt động được chia thành 3 cụm chính. Sử dụng AI để có thêm ý tưởng!</p>
+                </div>
+
+                <!-- Tabs Navigation -->
+                <div class="mb-8 border-b border-slate-200">
+                    <nav class="flex justify-center -mb-px space-x-6" aria-label="Tabs">
+                        <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-500 hover:text-blue-600 hover:border-blue-600 tab-active" data-tab="1">
+                            Vì Môi Trường Xanh
+                        </button>
+                        <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-500 hover:text-blue-600 hover:border-blue-600" data-tab="2">
+                            Uống Nước Nhớ Nguồn
+                        </button>
+                        <button class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-500 hover:text-blue-600 hover:border-blue-600" data-tab="3">
+                            Vì Đàn Em Thân Yêu
+                        </button>
+                    </nav>
+                </div>
+
+                <!-- Tabs Content -->
+                <div>
+                    <!-- Tab 1: Môi trường -->
+                    <div id="tab-content-1" class="tab-content">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+                                <h4 class="font-bold text-lg mb-2">Ngày Chủ Nhật Xanh</h4>
+                                <p class="text-slate-600">Ra quân dọn dẹp, xóa quảng cáo trái phép tại các tuyến đường Phan Trọng Tuệ, Ngọc Hồi. Tổ chức định kỳ 4 lần.</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+                                <h4 class="font-bold text-lg mb-2">Đổi Rác Thải Nhựa Lấy Quà</h4>
+                                <p class="text-slate-600">Thu gom 100kg+ nhựa, 500+ viên pin cũ để đổi lấy cây xanh, túi vải, lan tỏa lối sống xanh.</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-green-500">
+                                <h4 class="font-bold text-lg mb-2">"Bức Tường Nở Hoa"</h4>
+                                <p class="text-slate-600">Vẽ tranh tường chủ đề "Thanh Trì xanh" lên 02 bức tường cũ, làm đẹp không gian sống.</p>
+                            </div>
+                        </div>
+                        <div class="mt-8 text-center">
+                            <button class="generate-idea-btn bg-green-100 text-green-700 font-semibold py-2 px-4 rounded-full hover:bg-green-200 transition" data-category="Vì Môi Trường Xanh">✨ Gợi ý hoạt động mới từ AI</button>
+                        </div>
+                    </div>
+                    <!-- Tab 2: An Sinh -->
+                    <div id="tab-content-2" class="tab-content hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-red-500">
+                                <h4 class="font-bold text-lg mb-2">Thăm Hỏi Gia Đình Chính Sách</h4>
+                                <p class="text-slate-600">Thăm hỏi, dọn dẹp nhà cửa và tặng 20 suất quà ý nghĩa, thể hiện lòng tri ân.</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-red-500">
+                                <h4 class="font-bold text-lg mb-2">"Bữa Cơm Nghĩa Tình"</h4>
+                                <p class="text-slate-600">Nấu và trao 30 suất ăn trưa, kết hợp khám bệnh, phát thuốc cho người cao tuổi neo đơn.</p>
+                            </div>
+                        </div>
+                        <div class="mt-8 text-center">
+                            <button class="generate-idea-btn bg-red-100 text-red-700 font-semibold py-2 px-4 rounded-full hover:bg-red-200 transition" data-category="Uống Nước Nhớ Nguồn và An Sinh Xã Hội">✨ Gợi ý hoạt động mới từ AI</button>
+                        </div>
+                    </div>
+                    <!-- Tab 3: Thiếu nhi -->
+                    <div id="tab-content-3" class="tab-content hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                             <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-yellow-500">
+                                <h4 class="font-bold text-lg mb-2">Lớp Học Hè Vui Vẻ</h4>
+                                <p class="text-slate-600">Tổ chức sinh hoạt hè miễn phí (kỹ năng, văn nghệ, thể thao) cho 100+ em thiếu nhi.</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-yellow-500">
+                                <h4 class="font-bold text-lg mb-2">Cải Tạo Sân Chơi</h4>
+                                <p class="text-slate-600">Sơn mới thiết bị, vẽ trò chơi dân gian, tạo không gian vui chơi an toàn, sáng tạo cho các em.</p>
+                            </div>
+                        </div>
+                        <div class="mt-8 text-center">
+                            <button class="generate-idea-btn bg-yellow-100 text-yellow-700 font-semibold py-2 px-4 rounded-full hover:bg-yellow-200 transition" data-category="Hoạt động Vì Đàn Em Thân Yêu">✨ Gợi ý hoạt động mới từ AI</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Budget & Timeline Section -->
+        <section id="kinh-phi" class="py-16 lg:py-24 bg-white">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 items-center">
+                    <!-- Timeline -->
+                    <div class="lg:col-span-2">
+                        <div class="text-center lg:text-left mb-8">
+                            <h2 class="text-3xl font-bold text-slate-800">Lịch Trình Chiến Dịch</h2>
+                            <p class="mt-2 text-lg text-slate-500">Hành trình tình nguyện diễn ra trong 3 giai đoạn chính.</p>
+                        </div>
+                        <div class="relative">
+                            <!-- Vertical Line -->
+                            <div class="absolute left-4 top-0 h-full w-0.5 bg-slate-200"></div>
+                            <!-- Timeline Items -->
+                            <div class="relative pl-10 mb-8">
+                                <div class="absolute left-4 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-blue-600 rounded-full border-2 border-white"></div>
+                                <p class="font-semibold text-blue-600">Giai đoạn 1: Chuẩn bị</p>
+                                <p class="text-sm text-slate-500 font-medium">01/06 - 30/06/2025</p>
+                                <p class="text-slate-600 mt-1">Lên kế hoạch, tuyển quân, vận động tài trợ, khảo sát địa bàn.</p>
+                            </div>
+                            <div class="relative pl-10 mb-8">
+                                <div class="absolute left-4 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-green-600 rounded-full border-2 border-white"></div>
+                                <p class="font-semibold text-green-600">Giai đoạn 2: Triển khai</p>
+                                <p class="text-sm text-slate-500 font-medium">01/07 - 31/07/2025</p>
+                                <p class="text-slate-600 mt-1">Tổ chức lễ ra quân và thực hiện đồng loạt các hoạt động chính.</p>
+                            </div>
+                            <div class="relative pl-10">
+                                <div class="absolute left-4 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-slate-600 rounded-full border-2 border-white"></div>
+                                <p class="font-semibold text-slate-600">Giai đoạn 3: Tổng kết</p>
+                                <p class="text-sm text-slate-500 font-medium">01/08 - 07/08/2025</p>
+                                <p class="text-slate-600 mt-1">Gala tổng kết, họp rút kinh nghiệm và báo cáo thành quả.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Budget -->
+                    <div class="lg:col-span-3">
+                         <div class="text-center lg:text-left mb-8">
+                            <h2 class="text-3xl font-bold text-slate-800">Dự Toán Kinh Phí</h2>
+                            <p class="mt-2 text-lg text-slate-500">Tổng dự kiến: <span class="font-bold">45.500.000 VNĐ</span>. Nguồn vốn từ ngân sách và xã hội hóa.</p>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="budgetChart"></canvas>
+                        </div>
+                        <div class="text-center mt-6">
+                            <button id="toggle-budget-details" class="text-blue-600 font-semibold hover:underline">Xem chi tiết</button>
+                        </div>
+                        <div id="budget-details" class="hidden mt-4 overflow-x-auto">
+                            <table class="min-w-full bg-white text-sm">
+                                <thead class="bg-slate-100">
+                                    <tr>
+                                        <th class="text-left font-semibold p-3">Hạng mục</th>
+                                        <th class="text-right font-semibold p-3">Thành tiền (VNĐ)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b">
+                                        <td class="p-3">An sinh xã hội</td>
+                                        <td class="text-right p-3">13.000.000</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="p-3">Môi trường & Thiếu nhi</td>
+                                        <td class="text-right p-3">17.000.000</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="p-3">Hậu cần & Truyền thông</td>
+                                        <td class="text-right p-3">10.500.000</td>
+                                    </tr>
+                                    <tr class="border-b">
+                                        <td class="p-3">Chi phí phát sinh (10%)</td>
+                                        <td class="text-right p-3">5.000.000</td>
+                                    </tr>
+                                    <tr class="bg-slate-50">
+                                        <td class="font-bold p-3">TỔNG CỘNG</td>
+                                        <td class="text-right font-bold p-3">45.500.000</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Media & CTA Section -->
+        <section id="truyen-thong" class="py-16 lg:py-24">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-slate-800">Truyền Thông & Lời Kêu Gọi</h2>
+                    <p class="mt-2 text-lg text-slate-500">Lan tỏa tinh thần tình nguyện và kêu gọi sự chung tay từ cộng đồng.</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+                    <!-- Poster -->
+                    <div class="bg-slate-200 rounded-lg h-96 flex items-center justify-center text-slate-500 text-center p-8 shadow-lg">
+                        <div>
+                            <p class="text-2xl font-bold">[ Hình ảnh Poster Chiến dịch ]</p>
+                            <p class="mt-2">Poster chính thức sẽ được cập nhật tại đây.</p>
+                        </div>
+                    </div>
+                    <!-- AI Post Generator -->
+                    <div class="bg-white p-6 rounded-lg shadow-md border border-slate-200">
+                        <h3 class="font-bold text-xl mb-4">✨ Trợ lý Sáng tạo Nội dung AI</h3>
+                        <p class="text-slate-600 mb-6">Chọn chủ đề và để AI giúp bạn soạn thảo một bài đăng Facebook cuốn hút cho chiến dịch!</p>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label for="post-topic" class="block text-sm font-medium text-slate-700">Chọn chủ đề bài viết:</label>
+                                <select id="post-topic" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                                    <option>Kêu gọi Tình nguyện viên</option>
+                                    <option>Thông báo hoạt động cụ thể (VD: Chủ Nhật Xanh)</option>
+                                    <option>Cập nhật tiến độ hàng tuần</option>
+                                    <option>Kêu gọi tài trợ từ doanh nghiệp</option>
+                                    <option>Lời cảm ơn sau chiến dịch</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="post-tone" class="block text-sm font-medium text-slate-700">Chọn văn phong:</label>
+                                <select id="post-tone" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                                    <option>Nhiệt huyết & Trẻ trung</option>
+                                    <option>Trang trọng & Chuyên nghiệp</option>
+                                    <option>Gần gũi & Cảm động</option>
+                                </select>
+                            </div>
+
+                            <button id="generate-post-btn" class="w-full bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition flex items-center justify-center space-x-2 disabled:bg-blue-400">
+                                <span>Soạn bài đăng ngay</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 text-slate-300 py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p class="font-bold text-white">Đoàn Thanh niên Thị Trấn Văn Điển - Huyện Thanh Trì</p>
+            <p class="text-sm mt-2">Cùng chung tay vì một cộng đồng văn minh, giàu tình yêu thương.</p>
+            <p class="text-xs mt-4 text-slate-400">&copy; 2025 - Thiết kế và phát triển bởi Tình nguyện viên.</p>
+        </div>
+    </footer>
+
+    <!-- AI Generation Modal -->
+    <div id="ai-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden">
+        <div class="relative top-20 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <h3 id="ai-modal-title" class="text-lg leading-6 font-medium text-gray-900"></h3>
+                <div id="ai-modal-content" class="mt-2 px-7 py-3 max-h-96 overflow-y-auto text-left whitespace-pre-wrap">
+                    <!-- AI content will be injected here -->
+                </div>
+                <div class="items-center px-4 py-3 space-x-2">
+                     <button id="copy-ai-content-btn" class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-auto shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                        Sao chép nội dung
+                    </button>
+                    <button id="close-ai-modal" class="px-4 py-2 bg-gray-200 text-gray-800 text-base font-medium rounded-md w-auto shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                        Đóng
+                    </button>
+                </div>
+                 <p id="copy-feedback" class="text-sm text-green-600 mt-2 h-4"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Existing JS ---
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mainNav = document.getElementById('main-nav');
+            mobileMenuButton.addEventListener('click', () => {
+                mainNav.classList.toggle('hidden');
+            });
+
+            // Smooth scrolling for nav links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    if (this.getAttribute('href').length > 1) {
+                        e.preventDefault();
+                        document.querySelector(this.getAttribute('href')).scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                        if (window.innerWidth < 1024) {
+                             mainNav.classList.add('hidden');
+                        }
+                    }
+                });
+            });
+
+            // Tabs for Action Plan
+            const tabs = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    tabs.forEach(item => item.classList.remove('tab-active'));
+                    tab.classList.add('tab-active');
+
+                    tabContents.forEach(content => {
+                        if (content.id === `tab-content-${tabId}`) {
+                            content.classList.remove('hidden');
+                        } else {
+                            content.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            // Budget chart
+            const ctx = document.getElementById('budgetChart').getContext('2d');
+            const budgetData = {
+                labels: ['An sinh xã hội', 'Môi trường & Thiếu nhi', 'Hậu cần & Truyền thông', 'Chi phí phát sinh'],
+                datasets: [{
+                    data: [13000000, 17000000, 10500000, 5000000],
+                    backgroundColor: ['#ef4444', '#22c55e', '#3b82f6', '#64748b'],
+                    borderColor: '#f8fafc',
+                    hoverOffset: 8
+                }]
+            };
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: budgetData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { font: { family: "'Be Vietnam Pro', sans-serif" }}},
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) { label += ': '; }
+                                    if (context.parsed !== null) { label += new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(context.parsed); }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Toggle budget details
+            const toggleButton = document.getElementById('toggle-budget-details');
+            const budgetDetails = document.getElementById('budget-details');
+            toggleButton.addEventListener('click', () => {
+                const isHidden = budgetDetails.classList.toggle('hidden');
+                toggleButton.textContent = isHidden ? 'Xem chi tiết' : 'Ẩn chi tiết';
+            });
+            
+            // --- NEW: Gemini AI Integration JS ---
+
+            const aiModal = document.getElementById('ai-modal');
+            const aiModalTitle = document.getElementById('ai-modal-title');
+            const aiModalContent = document.getElementById('ai-modal-content');
+            const closeAiModalBtn = document.getElementById('close-ai-modal');
+            const copyAiContentBtn = document.getElementById('copy-ai-content-btn');
+            const copyFeedback = document.getElementById('copy-feedback');
+
+            // --- Modal Controls ---
+            const showModal = (title, content, isMarkdown = false) => {
+                aiModalTitle.textContent = title;
+                if (isMarkdown) {
+                    aiModalContent.innerHTML = marked.parse(content);
+                } else {
+                    aiModalContent.textContent = content;
+                }
+                copyFeedback.textContent = '';
+                aiModal.classList.remove('hidden');
+            };
+
+            const hideModal = () => {
+                aiModal.classList.add('hidden');
+            };
+
+            closeAiModalBtn.addEventListener('click', hideModal);
+            aiModal.addEventListener('click', (e) => {
+                if (e.target === aiModal) {
+                    hideModal();
+                }
+            });
+
+            // --- Clipboard ---
+            copyAiContentBtn.addEventListener('click', () => {
+                const textToCopy = aiModalContent.innerText;
+                const textArea = document.createElement('textarea');
+                textArea.value = textToCopy;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    copyFeedback.textContent = 'Đã sao chép vào clipboard!';
+                } catch (err) {
+                    copyFeedback.textContent = 'Lỗi! Không thể sao chép.';
+                    console.error('Lỗi sao chép: ', err);
+                }
+                document.body.removeChild(textArea);
+                setTimeout(() => { copyFeedback.textContent = ''; }, 2000);
+            });
+
+            // --- API Call Helper ---
+            const callGemini = async (prompt, button) => {
+                const originalButtonContent = button.innerHTML;
+                button.disabled = true;
+                button.innerHTML = '<div class="spinner"></div>';
+
+                let chatHistory = [{ role: "user", parts: [{ text: prompt }] }];
+                const payload = { contents: chatHistory };
+                const apiKey = ""; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const result = await response.json();
+                    
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        return result.candidates[0].content.parts[0].text;
+                    } else {
+                        console.error('API Response Error:', result);
+                        return 'Rất tiếc, AI không thể tạo phản hồi lúc này. Vui lòng thử lại sau.';
+                    }
+                } catch (error) {
+                    console.error('Fetch Error:', error);
+                    return 'Đã xảy ra lỗi kết nối. Vui lòng kiểm tra mạng và thử lại.';
+                } finally {
+                    button.disabled = false;
+                    button.innerHTML = originalButtonContent;
+                }
+            };
+
+            // --- Feature 1: Generate Idea ---
+            document.querySelectorAll('.generate-idea-btn').forEach(button => {
+                button.addEventListener('click', async (e) => {
+                    const category = e.target.dataset.category;
+                    const prompt = `Bạn là một người tổ chức chiến dịch tình nguyện Mùa Hè Xanh tại Việt Nam, đầy sáng tạo. Hãy đề xuất MỘT ý tưởng hoạt động mới, chi tiết và thực tế cho chủ đề '${category}'. Ý tưởng cần có: 1. Tên gọi hấp dẫn. 2. Mô tả ngắn gọn (2-3 câu). 3. Các bước thực hiện chính. 4. Vật dụng cần thiết. Trình bày dưới dạng markdown.`;
+                    
+                    showModal('AI đang suy nghĩ...', 'Vui lòng chờ trong giây lát...');
+                    const result = await callGemini(prompt, e.target);
+                    showModal(`Ý tưởng cho: ${category}`, result, true);
+                });
+            });
+
+            // --- Feature 2: Generate Social Post ---
+            const generatePostBtn = document.getElementById('generate-post-btn');
+            generatePostBtn.addEventListener('click', async (e) => {
+                const topic = document.getElementById('post-topic').value;
+                const tone = document.getElementById('post-tone').value;
+                const prompt = `Bạn là một chuyên gia truyền thông cho chiến dịch tình nguyện Mùa Hè Xanh 2025. Hãy soạn một bài đăng Facebook bằng tiếng Việt để '${topic}' với văn phong '${tone}'. Bài viết cần có emoji phù hợp, hashtag #MuaHeXanh2025 #TinhNguyenThanhTri, và một lời kêu gọi hành động rõ ràng. Bài viết phải thật cuốn hút, truyền cảm hứng và phù hợp với giới trẻ.`;
+                
+                showModal('AI đang viết bài...', 'Vui lòng chờ trong giây lát...');
+                const result = await callGemini(prompt, e.target);
+                showModal('Bài đăng do AI tạo', result);
+            });
+        });
+    </script>
+</body>
+</html>
